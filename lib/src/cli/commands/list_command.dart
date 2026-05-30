@@ -1,7 +1,9 @@
-import '../../config/config_parser.dart';
-import '../../config/config_model.dart';
 import 'dart:io';
+
 import 'package:path/path.dart' as path;
+
+import '../../config/config_model.dart';
+import '../../config/config_parser.dart';
 
 class ListCommand {
   void run() {

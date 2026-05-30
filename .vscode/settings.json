@@ -3,6 +3,9 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "Dart-Code.dart-code",
   "files.insertFinalNewline": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
   "[dart]": {
     "editor.formatOnSave": true,
     "editor.rulers": [

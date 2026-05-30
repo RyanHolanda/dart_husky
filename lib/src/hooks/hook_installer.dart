@@ -1,5 +1,7 @@
 import 'dart:io';
+
 import 'package:path/path.dart' as path;
+
 import '../config/config_model.dart';
 
 class HookInstaller {

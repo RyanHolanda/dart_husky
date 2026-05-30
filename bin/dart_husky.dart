@@ -1,8 +1,8 @@
 import 'package:args/args.dart';
 import 'package:dart_husky/src/cli/commands/install_command.dart';
-import 'package:dart_husky/src/cli/commands/uninstall_command.dart';
-import 'package:dart_husky/src/cli/commands/run_command.dart';
 import 'package:dart_husky/src/cli/commands/list_command.dart';
+import 'package:dart_husky/src/cli/commands/run_command.dart';
+import 'package:dart_husky/src/cli/commands/uninstall_command.dart';
 
 const _description = {
   'install': 'Install git hooks from dart_husky.yaml',

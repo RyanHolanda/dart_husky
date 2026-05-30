@@ -1,6 +1,8 @@
 import 'dart:io';
-import 'package:yaml/yaml.dart';
+
 import 'package:path/path.dart' as path;
+import 'package:yaml/yaml.dart';
+
 import 'config_model.dart';
 
 class ConfigParser {
