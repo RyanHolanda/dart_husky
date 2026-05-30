@@ -34,7 +34,10 @@ class HookRunner {
     }
   }
 
-  static Future<void> _runCommitMsgHook(HookConfig config, String? msgFilePath) async {
+  static Future<void> _runCommitMsgHook(
+    HookConfig config,
+    String? msgFilePath,
+  ) async {
     if (msgFilePath == null) {
       print('❌ No commit message file path provided.');
       exit(1);
@@ -64,16 +67,16 @@ class HookRunner {
     }
   }
 
-  static Future<void> _runSequential(Map<String, CommandConfig> commands) async {
+  static Future<void> _runSequential(
+    Map<String, CommandConfig> commands,
+  ) async {
     for (final entry in commands.entries) {
       await _runCommand(entry.key, entry.value);
     }
   }
 
   static Future<void> _runParallel(Map<String, CommandConfig> commands) async {
-    await Future.wait(
-      commands.entries.map((e) => _runCommand(e.key, e.value)),
-    );
+    await Future.wait(commands.entries.map((e) => _runCommand(e.key, e.value)));
   }
 
   static Future<void> _runCommand(String name, CommandConfig config) async {
@@ -83,11 +86,7 @@ class HookRunner {
     final executable = parts.first;
     final arguments = parts.skip(1).toList();
 
-    final result = await Process.run(
-      executable,
-      arguments,
-      runInShell: true,
-    );
+    final result = await Process.run(executable, arguments, runInShell: true);
 
     if (result.stdout.toString().isNotEmpty) {
       print(result.stdout);

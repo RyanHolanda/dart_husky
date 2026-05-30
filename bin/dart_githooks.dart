@@ -5,10 +5,10 @@ import 'package:dart_githooks/src/cli/commands/run_command.dart';
 import 'package:dart_githooks/src/cli/commands/list_command.dart';
 
 const _description = {
-  'install':   'Install git hooks from dart_githooks.yaml',
+  'install': 'Install git hooks from dart_githooks.yaml',
   'uninstall': 'Remove all installed git hooks',
-  'run':       'Run a specific hook manually',
-  'list':      'List all configured hooks',
+  'run': 'Run a specific hook manually',
+  'list': 'List all configured hooks',
 };
 
 void main(List<String> arguments) async {
@@ -27,7 +27,7 @@ void main(List<String> arguments) async {
       UninstallCommand().run();
     case 'run':
       final hookName = command?.rest.firstOrNull;
-      final arg = command?.rest.length > 1 ? command?.rest[1] : null;
+      final arg = (command?.rest.length ?? 0) > 1 ? command?.rest[1] : null;
       if (hookName == null) {
         print('Usage: dart run dart_githooks run <hook-name>');
         return;

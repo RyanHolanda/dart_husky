@@ -19,7 +19,9 @@ class ListCommand {
       final hookConfig = entry.value;
       final isInstalled = _isInstalled(hookType);
 
-      print('  ${hookType.scriptName.padRight(20)} ${isInstalled ? '✅ installed' : '❌ not installed'} — ${hookConfig.commands.length} command(s)');
+      print(
+        '  ${hookType.scriptName.padRight(20)} ${isInstalled ? '✅ installed' : '❌ not installed'} — ${hookConfig.commands.length} command(s)',
+      );
 
       for (final cmd in hookConfig.commands.entries) {
         print('    • ${cmd.key}: ${cmd.value.run}');
@@ -29,7 +31,12 @@ class ListCommand {
   }
 
   bool _isInstalled(HookType hookType) {
-    final hookPath = path.join(Directory.current.path, '.git', 'hooks', hookType.scriptName);
+    final hookPath = path.join(
+      Directory.current.path,
+      '.git',
+      'hooks',
+      hookType.scriptName,
+    );
     return File(hookPath).existsSync();
   }
 }

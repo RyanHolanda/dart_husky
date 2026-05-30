@@ -73,9 +73,7 @@ class ConfigParser {
     final preset = yaml['preset'] as String?;
 
     if (preset == null) {
-      throw FormatException(
-        'commit-msg command must have a "preset" field.',
-      );
+      throw FormatException('commit-msg command must have a "preset" field.');
     }
 
     return CommitMsgCommandConfig(preset: preset);
@@ -88,9 +86,6 @@ class ConfigParser {
       throw FormatException('Command is missing required "run" field.');
     }
 
-    return CommandConfig(
-      run: run,
-      glob: yaml['glob'] as String?,
-    );
+    return CommandConfig(run: run, glob: yaml['glob'] as String?);
   }
 }
