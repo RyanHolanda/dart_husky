@@ -28,10 +28,12 @@ enum HookType {
 class HookConfig {
   final bool parallel;
   final Map<String, CommandConfig> commands;
+  final Map<String, CommitMsgCommandConfig> msgCommands; // only used for commit-msg
 
   const HookConfig({
     this.parallel = false,
-    required this.commands,
+    this.commands = const {},
+    this.msgCommands = const {},
   });
 }
 
@@ -44,4 +46,11 @@ class CommandConfig {
     required this.run,
     this.glob,
   });
+}
+
+/// Specific to commit-msg hook — uses preset instead of a shell command
+class CommitMsgCommandConfig {
+  final String preset; // e.g. 'conventional'
+
+  const CommitMsgCommandConfig({required this.preset});
 }

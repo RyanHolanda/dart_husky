@@ -1,11 +1,11 @@
 import 'dart:io';
 import '../config/config_model.dart';
 import '../config/config_parser.dart';
+import 'commit_msg_validator.dart';
 
 class HookRunner {
   /// Called by the generated .git/hooks/ script
-  /// Reads config and executes all commands for the given hook
-  static Future<void> run(String hookName) async {
+  static Future<void> run(String hookName, {String? arg}) async {
     final hookType = HookType.fromString(hookName);
 
     if (hookType == null) {
@@ -23,10 +23,44 @@ class HookRunner {
 
     print('🪝 Running $hookName hooks...');
 
-    if (hookConfig.parallel) {
-      await _runParallel(hookConfig.commands);
+    if (hookType == HookType.commitMsg) {
+      await _runCommitMsgHook(hookConfig, arg);
     } else {
-      await _runSequential(hookConfig.commands);
+      if (hookConfig.parallel) {
+        await _runParallel(hookConfig.commands);
+      } else {
+        await _runSequential(hookConfig.commands);
+      }
+    }
+  }
+
+  static Future<void> _runCommitMsgHook(HookConfig config, String? msgFilePath) async {
+    if (msgFilePath == null) {
+      print('❌ No commit message file path provided.');
+      exit(1);
+    }
+
+    final message = File(msgFilePath).readAsStringSync();
+
+    for (final entry in config.msgCommands.entries) {
+      final name = entry.key;
+      final cmdConfig = entry.value;
+
+      print('  ▶ Running "$name"...');
+
+      if (cmdConfig.preset == 'conventional') {
+        final result = CommitMsgValidator.validate(message);
+
+        if (!result.passed) {
+          print('  ❌ "$name" failed:\n');
+          print(result.message);
+          exit(1);
+        }
+
+        print('  ✅ "$name" passed');
+      } else {
+        print('  ⚠️  Unknown preset "${cmdConfig.preset}" — skipping.');
+      }
     }
   }
 

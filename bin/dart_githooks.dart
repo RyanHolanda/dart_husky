@@ -11,7 +11,7 @@ const _description = {
   'list':      'List all configured hooks',
 };
 
-void main(List<String> arguments) {
+void main(List<String> arguments) async {
   final parser = ArgParser();
   for (final cmd in _description.keys) {
     parser.addCommand(cmd);
@@ -27,11 +27,12 @@ void main(List<String> arguments) {
       UninstallCommand().run();
     case 'run':
       final hookName = command?.rest.firstOrNull;
+      final arg = command?.rest.length > 1 ? command?.rest[1] : null;
       if (hookName == null) {
         print('Usage: dart run dart_githooks run <hook-name>');
         return;
       }
-      RunCommand().run(hookName);
+      await RunCommand().run(hookName, arg: arg);
     case 'list':
       ListCommand().run();
     default:

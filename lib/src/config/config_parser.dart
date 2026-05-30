@@ -39,22 +39,46 @@ class ConfigParser {
         continue;
       }
 
-      hooks[hookType] = _parseHookConfig(entry.value as YamlMap);
+      hooks[hookType] = _parseHookConfig(entry.value as YamlMap, hookType);
     }
 
     return GitHooksConfig(hooks: hooks);
   }
 
-  static HookConfig _parseHookConfig(YamlMap yaml) {
+  static HookConfig _parseHookConfig(YamlMap yaml, HookType hookType) {
     final parallel = yaml['parallel'] as bool? ?? false;
     final commandsYaml = yaml['commands'] as YamlMap? ?? YamlMap();
     final commands = <String, CommandConfig>{};
+    final msgCommands = <String, CommitMsgCommandConfig>{};
 
     for (final entry in commandsYaml.entries) {
-      commands[entry.key as String] = _parseCommandConfig(entry.value as YamlMap);
+      final name = entry.key as String;
+      final value = entry.value as YamlMap;
+
+      if (hookType == HookType.commitMsg) {
+        msgCommands[name] = _parseCommitMsgCommandConfig(value);
+      } else {
+        commands[name] = _parseCommandConfig(value);
+      }
     }
 
-    return HookConfig(parallel: parallel, commands: commands);
+    return HookConfig(
+      parallel: parallel,
+      commands: commands,
+      msgCommands: msgCommands,
+    );
+  }
+
+  static CommitMsgCommandConfig _parseCommitMsgCommandConfig(YamlMap yaml) {
+    final preset = yaml['preset'] as String?;
+
+    if (preset == null) {
+      throw FormatException(
+        'commit-msg command must have a "preset" field.',
+      );
+    }
+
+    return CommitMsgCommandConfig(preset: preset);
   }
 
   static CommandConfig _parseCommandConfig(YamlMap yaml) {
