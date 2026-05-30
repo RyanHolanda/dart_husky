@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.12.0'
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Run tests
+        run: dart test
+
+      - name: Release Please
+        uses: googleapis/release-please-action@v4
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: dart
+
+      - name: Publish to pub.dev
+        if: ${{ steps.release.outputs.release_created }}
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.12.0'
+
+      - name: Publish to pub.dev
+        if: ${{ steps.release.outputs.release_created }}
+        run: dart pub publish --force
+        env:
+          PUB_HOSTED_URL: https://pub.dev
