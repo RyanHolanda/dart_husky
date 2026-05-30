@@ -8,7 +8,7 @@ class ListCommand {
     final config = ConfigParser.parse();
 
     if (config.hooks.isEmpty) {
-      print('No hooks configured in dart_githooks.yaml');
+      print('No hooks configured in dart_husky.yaml');
       return;
     }
 

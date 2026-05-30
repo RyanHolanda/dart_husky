@@ -4,9 +4,9 @@ import 'package:path/path.dart' as path;
 import 'config_model.dart';
 
 class ConfigParser {
-  static const _configFileName = 'dart_githooks.yaml';
+  static const _configFileName = 'dart_husky.yaml';
 
-  /// Finds and parses dart_githooks.yaml from the project root
+  /// Finds and parses dart_husky.yaml from the project root
   static GitHooksConfig parse() {
     final configFile = _findConfigFile();
     final content = configFile.readAsStringSync();
@@ -20,7 +20,7 @@ class ConfigParser {
 
     if (!file.existsSync()) {
       throw FileSystemException(
-        'dart_githooks.yaml not found. Create one in your project root.',
+        'dart_husky.yaml not found. Create one in your project root.',
         configPath,
       );
     }

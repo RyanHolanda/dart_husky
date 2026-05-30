@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
-import 'package:dart_githooks/src/config/config_model.dart';
-import 'package:dart_githooks/src/hooks/commit_msg_validator.dart';
+import 'package:dart_husky/src/config/config_model.dart';
+import 'package:dart_husky/src/hooks/commit_msg_validator.dart';
 
 void main() {
   group('CommitMsgValidator', () {

@@ -1,4 +1,4 @@
-/// Represents the entire dart_githooks.yaml config file
+/// Represents the entire dart_husky.yaml config file
 class GitHooksConfig {
   final Map<HookType, HookConfig> hooks;
 

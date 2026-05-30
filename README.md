@@ -1,13 +1,13 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/moulibheemaneti/dart_githooks/main/.github/assets/logo.png" alt="dart_githooks" width="80" />
+<img src="https://raw.githubusercontent.com/moulibheemaneti/dart_husky/main/.github/assets/logo.png" alt="dart_husky" width="80" />
 
-# dart_githooks
+# dart_husky
 
 **Git hook manager for Dart & Flutter — no binaries, no fuss.**
 
-[![pub version](https://img.shields.io/pub/v/dart_githooks.svg?style=flat-square&color=0175C2&labelColor=1a1a2e)](https://pub.dev/packages/dart_githooks)
-[![pub points](https://img.shields.io/pub/points/dart_githooks?style=flat-square&color=0175C2&labelColor=1a1a2e)](https://pub.dev/packages/dart_githooks/score)
+[![pub version](https://img.shields.io/pub/v/dart_husky.svg?style=flat-square&color=0175C2&labelColor=1a1a2e)](https://pub.dev/packages/dart_husky)
+[![pub points](https://img.shields.io/pub/points/dart_husky?style=flat-square&color=0175C2&labelColor=1a1a2e)](https://pub.dev/packages/dart_husky/score)
 [![license](https://img.shields.io/badge/license-MIT-0175C2?style=flat-square&labelColor=1a1a2e)](LICENSE)
 [![dart](https://img.shields.io/badge/dart-%3E%3D3.12.0-0175C2?style=flat-square&labelColor=1a1a2e)](https://dart.dev)
 
@@ -18,9 +18,9 @@ Inspired by [husky](https://github.com/typicode/husky) and [lefthook](https://gi
 
 ---
 
-## Why dart_githooks?
+## Why dart_husky?
 
-Most git hook tools require installing a separate binary (Go, Node.js, etc.). `dart_githooks` is **pure Dart** — if your team has Dart, they have everything they need.
+Most git hook tools require installing a separate binary (Go, Node.js, etc.). `dart_husky` is **pure Dart** — if your team has Dart, they have everything they need.
 
 ```
 ✦ Pure Dart — no Go, no Node, no extra installs
@@ -38,14 +38,14 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dev_dependencies:
-  dart_githooks: ^1.0.0
+  dart_husky: ^1.0.0
 ```
 
 Install dependencies and set up hooks:
 
 ```sh
 dart pub get
-dart run dart_githooks install
+dart run dart_husky install
 ```
 
 That's it. Your hooks are live.
@@ -54,7 +54,7 @@ That's it. Your hooks are live.
 
 ## Configuration
 
-Create `dart_githooks.yaml` in your project root:
+Create `dart_husky.yaml` in your project root:
 
 ```yaml
 pre-commit:
@@ -87,17 +87,17 @@ commit-msg:
 ## Commands
 
 ```sh
-# Install hooks defined in dart_githooks.yaml
-dart run dart_githooks install
+# Install hooks defined in dart_husky.yaml
+dart run dart_husky install
 
 # Remove all installed hooks
-dart run dart_githooks uninstall
+dart run dart_husky uninstall
 
 # Manually trigger a hook
-dart run dart_githooks run pre-commit
+dart run dart_husky run pre-commit
 
 # List configured hooks and install status
-dart run dart_githooks list
+dart run dart_husky list
 ```
 
 ---
@@ -167,14 +167,14 @@ pre-commit:
 ```
 you run: git commit
          └── git checks .git/hooks/pre-commit
-                  └── dart run dart_githooks run pre-commit
-                           └── reads dart_githooks.yaml
+                  └── dart run dart_husky run pre-commit
+                           └── reads dart_husky.yaml
                                     └── runs each command
                                              ├── all pass → commit created ✅
                                              └── any fail → commit blocked ❌
 ```
 
-`dart_githooks install` writes a small shell script into `.git/hooks/` for each configured hook. The script detects whether to use `dart` or `fvm dart` automatically.
+`dart_husky install` writes a small shell script into `.git/hooks/` for each configured hook. The script detects whether to use `dart` or `fvm dart` automatically.
 
 <!-- 
 ---
@@ -200,7 +200,7 @@ you run: git commit
 
 ## Contributing
 
-Contributions are welcome! Please make sure your commits follow the conventional commits format — `dart_githooks` will enforce it. 😄
+Contributions are welcome! Please make sure your commits follow the conventional commits format — `dart_husky` will enforce it. 😄
 
 ---
 

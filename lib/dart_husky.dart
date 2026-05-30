@@ -1,4 +1,4 @@
-/// dart_githooks — Git hook manager for Dart & Flutter projects
+/// dart_husky — Git hook manager for Dart & Flutter projects
 library;
 
 export 'src/config/config_model.dart';

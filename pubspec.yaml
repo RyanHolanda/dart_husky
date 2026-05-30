@@ -1,7 +1,7 @@
-name: dart_githooks
+name: dart_husky
 description: A pure-Dart CLI tool to manage Git hooks (pre-commit, commit-msg, pre-push) in any Dart or Flutter project. Similar to husky and lefthook.
 version: 1.0.0
-repository: https://github.com/moulibheemaneti/dart_githooks
+repository: https://github.com/moulibheemaneti/dart_husky
 
 environment:
   sdk: ^3.12.0
