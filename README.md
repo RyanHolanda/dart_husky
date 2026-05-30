@@ -27,6 +27,8 @@ Most git hook tools require installing a separate binary (Go, Node.js, etc.). `d
 ✦ YAML config — familiar, readable, version-controlled
 ✦ Built-in conventional commits validation
 ✦ Sequential or parallel command execution
+✦ Staged-only mode — run commands on staged files only
+✦ Glob filtering — skip commands when no matching files are staged
 ✦ Works with dart, flutter, and fvm
 ```
 
@@ -38,7 +40,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dev_dependencies:
-  dart_husky: ^1.0.0
+  dart_husky: ^1.2.0
 ```
 
 Install dependencies and set up hooks:
@@ -57,6 +59,10 @@ That's it. Your hooks are live.
 Create `dart_husky.yaml` in your project root:
 
 ```yaml
+dart_husky:
+  verbose: true       # print detailed output (default: true)
+  staged_only: false  # run on staged files only (default: false)
+
 pre-commit:
   commands:
     format:
@@ -142,6 +148,74 @@ git commit -m "feat!: breaking api change"           ✅
 git commit -m "updated stuff"                        ❌
 ```
 
+### Custom Commit Types
+
+Append custom types on top of the built-in list:
+
+```yaml
+commit-msg:
+  commands:
+    conventional:
+      preset: conventional
+      types:
+        append: [wip, release]
+```
+
+Or completely override the built-in types:
+
+```yaml
+commit-msg:
+  commands:
+    conventional:
+      preset: conventional
+      types:
+        override: [feat, fix, hotfix, release]
+```
+
+---
+
+## Staged-Only Mode
+
+Run commands only on staged files instead of the entire project. Faster hooks for large codebases.
+
+Enable globally for all commands:
+
+```yaml
+dart_husky:
+  staged_only: true
+
+pre-commit:
+  commands:
+    format:
+      run: dart format --set-exit-if-changed .
+    analyze:
+      run: dart analyze
+    test:
+      run: dart test
+      staged_only: false  # override — always run full test suite
+```
+
+Command-level `staged_only` always overrides the global setting. If no staged files are found, the command is skipped automatically.
+
+---
+
+## Glob Filtering
+
+Skip commands entirely when no staged files match a pattern:
+
+```yaml
+pre-commit:
+  commands:
+    format:
+      run: dart format --set-exit-if-changed .
+      glob: '**/*.dart'   # skip if no .dart files are staged
+    analyze:
+      run: dart analyze
+      glob: '**/*.dart'
+```
+
+If you only staged `README.md`, both `format` and `analyze` are skipped — no unnecessary work.
+
 ---
 
 ## Parallel Execution
@@ -176,27 +250,7 @@ you run: git commit
 
 `dart_husky install` writes a small shell script into `.git/hooks/` for each configured hook. The script detects whether to use `dart` or `fvm dart` automatically.
 
-<!-- 
 ---
-
-## Requirements
-
-- Dart SDK `>=3.12.0`
-- macOS *(Linux & Windows coming in v1.1.0)*
-- A git repository
-
----
-
-## Roadmap
-
-| Version | What's coming |
-|---|---|
-| `v1.1.0` | Linux & Windows support, verbose config, custom commit types |
-| `v1.2.0` | Glob filtering — run commands only on staged matching files |
-| `v2.0.0` | Plugin system, shareable hook configs |
-
---- 
--->
 
 ## Contributing
 
