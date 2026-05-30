@@ -1,0 +1,51 @@
+import 'package:args/args.dart';
+import 'package:dart_githooks/src/cli/commands/install_command.dart';
+import 'package:dart_githooks/src/cli/commands/uninstall_command.dart';
+import 'package:dart_githooks/src/cli/commands/run_command.dart';
+import 'package:dart_githooks/src/cli/commands/list_command.dart';
+
+const _description = {
+  'install':   'Install git hooks from dart_githooks.yaml',
+  'uninstall': 'Remove all installed git hooks',
+  'run':       'Run a specific hook manually',
+  'list':      'List all configured hooks',
+};
+
+void main(List<String> arguments) {
+  final parser = ArgParser();
+  for (final cmd in _description.keys) {
+    parser.addCommand(cmd);
+  }
+
+  final results = parser.parse(arguments);
+  final command = results.command;
+
+  switch (command?.name) {
+    case 'install':
+      InstallCommand().run();
+    case 'uninstall':
+      UninstallCommand().run();
+    case 'run':
+      final hookName = command?.rest.firstOrNull;
+      if (hookName == null) {
+        print('Usage: dart run dart_githooks run <hook-name>');
+        return;
+      }
+      RunCommand().run(hookName);
+    case 'list':
+      ListCommand().run();
+    default:
+      _printHelp();
+  }
+}
+
+void _printHelp() {
+  print('dart_githooks — Git hook manager for Dart & Flutter');
+  print('');
+  print('Usage: dart run dart_githooks <command>');
+  print('');
+  print('Commands:');
+  for (final entry in _description.entries) {
+    print('  ${entry.key.padRight(12)}${entry.value}');
+  }
+}

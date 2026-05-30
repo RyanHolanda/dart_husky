@@ -1,0 +1,35 @@
+import '../../config/config_parser.dart';
+import '../../config/config_model.dart';
+import 'dart:io';
+import 'package:path/path.dart' as path;
+
+class ListCommand {
+  void run() {
+    final config = ConfigParser.parse();
+
+    if (config.hooks.isEmpty) {
+      print('No hooks configured in dart_githooks.yaml');
+      return;
+    }
+
+    print('🪝 Configured hooks:\n');
+
+    for (final entry in config.hooks.entries) {
+      final hookType = entry.key;
+      final hookConfig = entry.value;
+      final isInstalled = _isInstalled(hookType);
+
+      print('  ${hookType.scriptName.padRight(20)} ${isInstalled ? '✅ installed' : '❌ not installed'} — ${hookConfig.commands.length} command(s)');
+
+      for (final cmd in hookConfig.commands.entries) {
+        print('    • ${cmd.key}: ${cmd.value.run}');
+      }
+      print('');
+    }
+  }
+
+  bool _isInstalled(HookType hookType) {
+    final hookPath = path.join(Directory.current.path, '.git', 'hooks', hookType.scriptName);
+    return File(hookPath).existsSync();
+  }
+}
