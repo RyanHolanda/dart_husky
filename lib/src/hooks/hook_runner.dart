@@ -1,4 +1,7 @@
 import 'dart:io';
+
+import 'package:glob/glob.dart';
+
 import '../config/config_model.dart';
 import '../config/config_parser.dart';
 import '../utils/git_utils.dart';
@@ -27,8 +30,14 @@ class HookRunner {
     if (hookType == HookType.commitMsg) {
       await _runCommitMsgHook(hookConfig, arg);
     } else {
-      // fetch staged files once for all commands
-      final stagedFiles = config.globalConfig.stagedOnly
+      // fetch staged files only if needed — glob filtering or staged_only is active
+      final needsStagedFiles =
+          config.globalConfig.stagedOnly ||
+          hookConfig.commands.values.any(
+            (c) => c.stagedOnly == true || c.glob != null,
+          );
+
+      final stagedFiles = needsStagedFiles
           ? await GitUtils.getStagedFiles()
           : <String>[];
 
@@ -113,6 +122,16 @@ class HookRunner {
     DartHuskyConfig globalConfig,
     List<String> stagedFiles,
   ) async {
+    // check glob filter first — skip if no staged files match
+    if (config.glob != null) {
+      final matcher = Glob(config.glob!);
+      final hasMatch = stagedFiles.any((f) => matcher.matches(f));
+      if (!hasMatch) {
+        print('  ⏭️  "$name" skipped — no staged files match "${config.glob}"');
+        return;
+      }
+    }
+
     print('  ▶ Running "$name"...');
 
     // resolve staged_only — command level overrides global

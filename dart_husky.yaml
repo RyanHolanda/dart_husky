@@ -7,11 +7,13 @@ pre-commit:
     format:
       run: dart format --set-exit-if-changed .
       staged_only: false
+      glob: '**/*.dart'
     analyze:
       run: dart analyze
+      glob: '**/*.dart'
     test:
       run: dart test
-      staged_only: false   # always run full test suite
+      staged_only: false
 
 commit-msg:
   commands:
