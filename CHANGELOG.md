@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-05-30
+
+### Added
+- **Example Usage**: Introduced a package usage example ([example/example.dart](file:///Users/moulibheemaneti/Documents/flutter_packages/dart_husky/example/example.dart)) illustrating the declarative `dart_husky.yaml` setup.
+- **New lint prefix support**: `bump` prefix is added to commit message validator.
+
+### Documented
+- **API Documentation**: Added comprehensive, high-quality Dartdoc comments to all public models, config configurations, validators, and classes to elevate package API clarity and maximize the pub.dev score.
+
 ## [1.0.0] - 2026-05-30
 
 ### Added
