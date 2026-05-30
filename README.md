@@ -30,6 +30,7 @@ Most git hook tools require installing a separate binary (Go, Node.js, etc.). `d
 ✦ Staged-only mode — run commands on staged files only
 ✦ Glob filtering — skip commands when no matching files are staged
 ✦ Works with dart, flutter, and fvm
+✦ Lowercase enforcement — optionally force lowercase commit messages
 ```
 
 ---
@@ -173,6 +174,30 @@ commit-msg:
 ```
 
 ---
+
+### Lowercase Enforcement
+
+Force all commit messages to be lowercase (default: `true`):
+
+```yaml
+commit-msg:
+  commands:
+    conventional:
+      preset: conventional
+      only_small_case: true  # default
+```
+
+To allow mixed case:
+
+```yaml
+commit-msg:
+  commands:
+    conventional:
+      preset: conventional
+      only_small_case: false
+```
+
+Applies to any preset, not just conventional commits.
 
 ## Staged-Only Mode
 
