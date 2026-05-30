@@ -1,6 +1,7 @@
 import 'dart:io';
 import '../config/config_model.dart';
 import '../config/config_parser.dart';
+import '../utils/git_utils.dart';
 import 'commit_msg_validator.dart';
 
 class HookRunner {
@@ -26,10 +27,23 @@ class HookRunner {
     if (hookType == HookType.commitMsg) {
       await _runCommitMsgHook(hookConfig, arg);
     } else {
+      // fetch staged files once for all commands
+      final stagedFiles = config.globalConfig.stagedOnly
+          ? await GitUtils.getStagedFiles()
+          : <String>[];
+
       if (hookConfig.parallel) {
-        await _runParallel(hookConfig.commands);
+        await _runParallel(
+          hookConfig.commands,
+          config.globalConfig,
+          stagedFiles,
+        );
       } else {
-        await _runSequential(hookConfig.commands);
+        await _runSequential(
+          hookConfig.commands,
+          config.globalConfig,
+          stagedFiles,
+        );
       }
     }
   }
@@ -73,20 +87,47 @@ class HookRunner {
 
   static Future<void> _runSequential(
     Map<String, CommandConfig> commands,
+    DartHuskyConfig globalConfig,
+    List<String> stagedFiles,
   ) async {
     for (final entry in commands.entries) {
-      await _runCommand(entry.key, entry.value);
+      await _runCommand(entry.key, entry.value, globalConfig, stagedFiles);
     }
   }
 
-  static Future<void> _runParallel(Map<String, CommandConfig> commands) async {
-    await Future.wait(commands.entries.map((e) => _runCommand(e.key, e.value)));
+  static Future<void> _runParallel(
+    Map<String, CommandConfig> commands,
+    DartHuskyConfig globalConfig,
+    List<String> stagedFiles,
+  ) async {
+    await Future.wait(
+      commands.entries.map(
+        (e) => _runCommand(e.key, e.value, globalConfig, stagedFiles),
+      ),
+    );
   }
 
-  static Future<void> _runCommand(String name, CommandConfig config) async {
+  static Future<void> _runCommand(
+    String name,
+    CommandConfig config,
+    DartHuskyConfig globalConfig,
+    List<String> stagedFiles,
+  ) async {
     print('  ▶ Running "$name"...');
 
-    final parts = config.run.split(' ');
+    // resolve staged_only — command level overrides global
+    final useStagedOnly = config.stagedOnly ?? globalConfig.stagedOnly;
+
+    var commandToRun = config.run;
+
+    if (useStagedOnly && stagedFiles.isNotEmpty) {
+      commandToRun = '${config.run} ${stagedFiles.join(' ')}';
+    } else if (useStagedOnly && stagedFiles.isEmpty) {
+      print('  ⏭️  "$name" skipped — no staged files.');
+      return;
+    }
+
+    final parts = commandToRun.split(' ');
     final executable = parts.first;
     final arguments = parts.skip(1).toList();
 
@@ -99,7 +140,7 @@ class HookRunner {
     if (result.exitCode != 0) {
       print('  ❌ "$name" failed:');
       print(result.stderr);
-      exit(result.exitCode); // blocks the git action
+      exit(result.exitCode);
     }
 
     print('  ✅ "$name" passed');

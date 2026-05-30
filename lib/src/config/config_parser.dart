@@ -56,7 +56,10 @@ class ConfigParser {
   }
 
   static DartHuskyConfig _parseGlobalConfig(YamlMap yaml) {
-    return DartHuskyConfig(verbose: yaml['verbose'] as bool? ?? true);
+    return DartHuskyConfig(
+      verbose: yaml['verbose'] as bool? ?? true,
+      stagedOnly: yaml['staged_only'] as bool? ?? false,
+    );
   }
 
   static HookConfig _parseHookConfig(YamlMap yaml, HookType hookType) {
@@ -90,7 +93,11 @@ class ConfigParser {
       throw FormatException('Command is missing required "run" field.');
     }
 
-    return CommandConfig(run: run, glob: yaml['glob'] as String?);
+    return CommandConfig(
+      run: run,
+      glob: yaml['glob'] as String?,
+      stagedOnly: yaml['staged_only'] as bool?,
+    );
   }
 
   static CommitMsgCommandConfig _parseCommitMsgCommandConfig(YamlMap yaml) {

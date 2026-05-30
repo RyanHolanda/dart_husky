@@ -18,8 +18,11 @@ class DartHuskyConfig {
   /// Whether to print verbose output (default: true)
   final bool verbose;
 
+  /// Whether to run commands on staged files only (default: false)
+  final bool stagedOnly;
+
   /// Creates a [DartHuskyConfig] with the given settings
-  const DartHuskyConfig({this.verbose = true});
+  const DartHuskyConfig({this.verbose = true, this.stagedOnly = false});
 }
 
 /// All supported git hook types
@@ -80,8 +83,12 @@ class CommandConfig {
   /// Optional glob pattern — only run if matching files are staged
   final String? glob;
 
+  /// Override global staged_only for this command specifically
+  /// If null, falls back to global dart_husky.staged_only
+  final bool? stagedOnly;
+
   /// Creates a [CommandConfig] with the given run command
-  const CommandConfig({required this.run, this.glob});
+  const CommandConfig({required this.run, this.glob, this.stagedOnly});
 }
 
 /// Specific to commit-msg hook — uses a preset instead of a shell command

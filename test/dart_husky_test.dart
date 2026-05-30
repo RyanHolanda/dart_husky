@@ -80,9 +80,17 @@ void main() {
     });
 
     group('append types', () {
-      test('appended type is valid', () {
+      test('appended type wip is valid', () {
         final result = CommitMsgValidator.validate(
           'wip: work in progress',
+          appendTypes: ['wip', 'release'],
+        );
+        expect(result.passed, isTrue);
+      });
+
+      test('appended type release is valid', () {
+        final result = CommitMsgValidator.validate(
+          'release: v1.0.0',
           appendTypes: ['wip', 'release'],
         );
         expect(result.passed, isTrue);
@@ -91,15 +99,15 @@ void main() {
       test('built-in types still valid when appending', () {
         final result = CommitMsgValidator.validate(
           'feat: still works',
-          appendTypes: ['wip'],
+          appendTypes: ['wip', 'release'],
         );
         expect(result.passed, isTrue);
       });
 
       test('non-appended custom type is invalid', () {
         final result = CommitMsgValidator.validate(
-          'release: v1.0.0',
-          appendTypes: ['wip'],
+          'hotfix: critical bug',
+          appendTypes: ['wip', 'release'],
         );
         expect(result.passed, isFalse);
       });
@@ -160,6 +168,33 @@ void main() {
       const config = DartHuskyConfig(verbose: false);
       expect(config.verbose, isFalse);
     });
+
+    test('stagedOnly defaults to false', () {
+      const config = DartHuskyConfig();
+      expect(config.stagedOnly, isFalse);
+    });
+
+    test('stagedOnly can be set to true', () {
+      const config = DartHuskyConfig(stagedOnly: true);
+      expect(config.stagedOnly, isTrue);
+    });
+  });
+
+  group('CommandConfig', () {
+    test('stagedOnly defaults to null — inherits global', () {
+      const config = CommandConfig(run: 'dart format .');
+      expect(config.stagedOnly, isNull);
+    });
+
+    test('stagedOnly can be explicitly set to false', () {
+      const config = CommandConfig(run: 'dart test', stagedOnly: false);
+      expect(config.stagedOnly, isFalse);
+    });
+
+    test('stagedOnly can be explicitly set to true', () {
+      const config = CommandConfig(run: 'dart format .', stagedOnly: true);
+      expect(config.stagedOnly, isTrue);
+    });
   });
 
   group('CommitMsgCommandConfig', () {
@@ -171,6 +206,14 @@ void main() {
     test('overrideTypes defaults to empty', () {
       const config = CommitMsgCommandConfig(preset: 'conventional');
       expect(config.overrideTypes, isEmpty);
+    });
+
+    test('appendTypes are stored correctly', () {
+      const config = CommitMsgCommandConfig(
+        preset: 'conventional',
+        appendTypes: ['wip', 'release'],
+      );
+      expect(config.appendTypes, equals(['wip', 'release']));
     });
   });
 }
