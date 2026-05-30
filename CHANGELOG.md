@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-05-30
+
+### Added
+- **Staged-Only Mode**: Added support for running hook commands on git staged files only. Configurable globally under `dart_husky: staged_only: true/false` or overridden at individual command levels. If files are staged, they are appended to the command execution; if no files are staged, the command is skipped.
+- **Custom Commit-Msg Types**: Added `append` and `override` configuration to the `commit-msg` preset conventional validator, allowing users to append custom commit types or completely override the built-in list.
+- **Verbose Output Toggle**: Introduced global `verbose` setting to enable/disable detailed execution logs.
+- **Git Utilities**: Added `GitUtils` to retrieve currently staged files using `git diff --cached --name-only` dynamically.
+
 ## [1.0.1] - 2026-05-30
 
 ### Added
