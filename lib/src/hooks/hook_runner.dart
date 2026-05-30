@@ -72,6 +72,22 @@ class HookRunner {
       final name = entry.key;
       final cmdConfig = entry.value;
 
+      // universal check — runs regardless of preset
+      if (cmdConfig.onlySmallCase) {
+        print('  ▶ Running lowercase check...');
+
+        final firstLine = message.trim().split('\n').first;
+
+        if (firstLine != firstLine.toLowerCase()) {
+          print('  ❌ lowercase check failed:\n');
+          print('  Commit message must be lowercase.');
+          print('  Got: $firstLine\n');
+          exit(1);
+        }
+
+        print('  ✅ lowercase check passed');
+      }
+
       print('  ▶ Running "$name"...');
 
       if (cmdConfig.preset == 'conventional') {
@@ -79,6 +95,7 @@ class HookRunner {
           message,
           appendTypes: cmdConfig.appendTypes,
           overrideTypes: cmdConfig.overrideTypes,
+          onlySmallCase: false,
         );
 
         if (!result.passed) {

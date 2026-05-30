@@ -123,6 +123,7 @@ class ConfigParser {
       preset: preset,
       appendTypes: appendTypes,
       overrideTypes: overrideTypes,
+      onlySmallCase: yaml['only_small_case'] as bool? ?? true,
     );
   }
 

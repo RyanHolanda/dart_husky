@@ -102,10 +102,14 @@ class CommitMsgCommandConfig {
   /// Custom types to override the built-in preset types entirely
   final List<String> overrideTypes;
 
+  /// Whether to enforce lowercase commit messages (default: true)
+  final bool onlySmallCase;
+
   /// Creates a [CommitMsgCommandConfig] with the given preset
   const CommitMsgCommandConfig({
     required this.preset,
     this.appendTypes = const [],
     this.overrideTypes = const [],
+    this.onlySmallCase = true,
   });
 }

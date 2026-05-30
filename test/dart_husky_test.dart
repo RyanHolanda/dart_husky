@@ -216,4 +216,30 @@ void main() {
       expect(config.appendTypes, equals(['wip', 'release']));
     });
   });
+
+  group('only_small_case', () {
+    test('lowercase message passes', () {
+      final result = CommitMsgValidator.validate(
+        'feat: add login screen',
+        onlySmallCase: true,
+      );
+      expect(result.passed, isTrue);
+    });
+
+    test('uppercase message fails when onlySmallCase is true', () {
+      final result = CommitMsgValidator.validate(
+        'feat: Add Login Screen',
+        onlySmallCase: true,
+      );
+      expect(result.passed, isFalse);
+    });
+
+    test('uppercase message passes when onlySmallCase is false', () {
+      final result = CommitMsgValidator.validate(
+        'feat: Add Login Screen',
+        onlySmallCase: false,
+      );
+      expect(result.passed, isTrue);
+    });
+  });
 }

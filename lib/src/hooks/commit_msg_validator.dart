@@ -38,6 +38,7 @@ class CommitMsgValidator {
     String message, {
     List<String> appendTypes = const [],
     List<String> overrideTypes = const [],
+    bool onlySmallCase = true,
   }) {
     final validTypes = _resolveTypes(appendTypes, overrideTypes);
     final pattern = _buildPattern(validTypes);
@@ -45,6 +46,17 @@ class CommitMsgValidator {
 
     if (firstLine.isEmpty) {
       return ValidationResult.fail('Commit message cannot be empty.');
+    }
+
+    if (onlySmallCase && firstLine != firstLine.toLowerCase()) {
+      return ValidationResult.fail(
+        'Commit message must be lowercase.\n'
+        '\n'
+        '  Got: $firstLine\n'
+        '\n'
+        '  Example:\n'
+        '    feat(auth): add login screen\n',
+      );
     }
 
     if (!pattern.hasMatch(firstLine)) {
