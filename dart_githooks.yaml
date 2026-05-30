@@ -1,0 +1,11 @@
+pre-commit:
+  commands:
+    format:
+      run: dart format --set-exit-if-changed .
+    analyze:
+      run: dart analyze
+
+commit-msg:
+  commands:
+    conventional:
+      preset: conventional
