@@ -1,16 +1,22 @@
 # Changelog
 
-## 1.0.0 (2026-05-30)
+All notable changes to this project will be documented in this file.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-### Features
+## [1.0.0] - 2026-05-30
 
-* format the files ([30a9689](https://github.com/moulibheemaneti/dart_husky/commit/30a9689b84d6b220b5e3875f47d1769cad710269))
-
-## 1.0.0
-
-- Initial release
-- `pre-commit` hook support
-- `commit-msg` hook with built-in conventional commits validation
-- Sequential and parallel command execution
-- macOS support
+### Added
+- **Pure-Dart CLI Tooling**: Lightweight, zero-dependency Git hooks manager designed specifically for Dart and Flutter projects.
+- **Robust Hook Installer**: Installs custom lightweight shell scripts into `.git/hooks/` that automatically detect and support both global `dart` and `fvm dart` environments.
+- **Declarative YAML Configuration**: Set up all your project's hook commands inside a single `dart_husky.yaml` file.
+- **Sequential & Parallel Command Execution**: Speed up your development workflow by executing hook commands in parallel (`parallel: true`) or sequentially (default).
+- **Built-in Conventional Commits Preset**: Out-of-the-box support for validating commit messages against the Conventional Commits specification (supports types: `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `test`, `build`, `ci`, `perf`, `revert`).
+- **Comprehensive CLI Interface**:
+  - `dart run dart_husky install` — Installs or syncs all hooks configured in `dart_husky.yaml`.
+  - `dart run dart_husky uninstall` — Safely removes all `dart_husky` managed Git hooks.
+  - `dart run dart_husky run <hook-name>` — Manually run/test hook commands.
+  - `dart run dart_husky list` — Display all configured hooks and their installation status.
+- **Supported Hooks**: Native support for `pre-commit`, `commit-msg`, `pre-push`, `post-checkout`, and `pre-merge-commit`.
+- **Platform Support**: Verified compatibility with macOS environments.
