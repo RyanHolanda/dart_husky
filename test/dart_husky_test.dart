@@ -44,6 +44,7 @@ void main() {
           'ci',
           'perf',
           'revert',
+          'bump',
         ];
         for (final type in validTypes) {
           final result = CommitMsgValidator.validate('$type: some subject');

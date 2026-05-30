@@ -15,6 +15,7 @@ class CommitMsgValidator {
     'ci',
     'perf',
     'revert',
+    'bump',
   ];
 
   /// Regex pattern matching: type(optional scope)!: subject
