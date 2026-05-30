@@ -1,16 +1,3 @@
-import 'package:dart_githooks/dart_githooks.dart';
-import 'package:test/test.dart';
-
 void main() {
-  group('A group of tests', () {
-    final awesome = Awesome();
-
-    setUp(() {
-      // Additional setup goes here.
-    });
-
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
-    });
-  });
+  // Tests will be added in the next phase
 }
