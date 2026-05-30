@@ -4,7 +4,7 @@ import 'package:dart_husky/src/hooks/commit_msg_validator.dart';
 
 void main() {
   group('CommitMsgValidator', () {
-    group('valid messages', () {
+    group('valid messages — built-in types', () {
       test('simple type and subject', () {
         final result = CommitMsgValidator.validate('feat: add login screen');
         expect(result.passed, isTrue);
@@ -31,7 +31,7 @@ void main() {
         expect(result.passed, isTrue);
       });
 
-      test('all valid types', () {
+      test('all valid built-in types', () {
         final validTypes = [
           'feat',
           'fix',
@@ -44,7 +44,6 @@ void main() {
           'ci',
           'perf',
           'revert',
-          'bump',
         ];
         for (final type in validTypes) {
           final result = CommitMsgValidator.validate('$type: some subject');
@@ -79,6 +78,58 @@ void main() {
         expect(result.passed, isFalse);
       });
     });
+
+    group('append types', () {
+      test('appended type is valid', () {
+        final result = CommitMsgValidator.validate(
+          'wip: work in progress',
+          appendTypes: ['wip', 'release'],
+        );
+        expect(result.passed, isTrue);
+      });
+
+      test('built-in types still valid when appending', () {
+        final result = CommitMsgValidator.validate(
+          'feat: still works',
+          appendTypes: ['wip'],
+        );
+        expect(result.passed, isTrue);
+      });
+
+      test('non-appended custom type is invalid', () {
+        final result = CommitMsgValidator.validate(
+          'release: v1.0.0',
+          appendTypes: ['wip'],
+        );
+        expect(result.passed, isFalse);
+      });
+    });
+
+    group('override types', () {
+      test('override type is valid', () {
+        final result = CommitMsgValidator.validate(
+          'release: v1.0.0',
+          overrideTypes: ['release', 'hotfix'],
+        );
+        expect(result.passed, isTrue);
+      });
+
+      test('built-in types invalid when overridden', () {
+        final result = CommitMsgValidator.validate(
+          'feat: something',
+          overrideTypes: ['release', 'hotfix'],
+        );
+        expect(result.passed, isFalse);
+      });
+
+      test('only override types are valid', () {
+        final result = CommitMsgValidator.validate(
+          'hotfix: critical bug',
+          overrideTypes: ['release', 'hotfix'],
+        );
+        expect(result.passed, isTrue);
+      });
+    });
   });
 
   group('HookType', () {
@@ -96,6 +147,30 @@ void main() {
       expect(HookType.preCommit.scriptName, equals('pre-commit'));
       expect(HookType.commitMsg.scriptName, equals('commit-msg'));
       expect(HookType.prePush.scriptName, equals('pre-push'));
+    });
+  });
+
+  group('DartHuskyConfig', () {
+    test('verbose defaults to true', () {
+      const config = DartHuskyConfig();
+      expect(config.verbose, isTrue);
+    });
+
+    test('verbose can be set to false', () {
+      const config = DartHuskyConfig(verbose: false);
+      expect(config.verbose, isFalse);
+    });
+  });
+
+  group('CommitMsgCommandConfig', () {
+    test('appendTypes defaults to empty', () {
+      const config = CommitMsgCommandConfig(preset: 'conventional');
+      expect(config.appendTypes, isEmpty);
+    });
+
+    test('overrideTypes defaults to empty', () {
+      const config = CommitMsgCommandConfig(preset: 'conventional');
+      expect(config.overrideTypes, isEmpty);
     });
   });
 }

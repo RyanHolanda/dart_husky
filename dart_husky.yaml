@@ -1,3 +1,6 @@
+dart_husky:
+  verbose: true
+
 pre-commit:
   commands:
     format:
@@ -9,3 +12,5 @@ commit-msg:
   commands:
     conventional:
       preset: conventional
+      types:
+        append: [wip, release]

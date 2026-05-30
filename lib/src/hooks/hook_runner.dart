@@ -52,7 +52,11 @@ class HookRunner {
       print('  ▶ Running "$name"...');
 
       if (cmdConfig.preset == 'conventional') {
-        final result = CommitMsgValidator.validate(message);
+        final result = CommitMsgValidator.validate(
+          message,
+          appendTypes: cmdConfig.appendTypes,
+          overrideTypes: cmdConfig.overrideTypes,
+        );
 
         if (!result.passed) {
           print('  ❌ "$name" failed:\n');

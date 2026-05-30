@@ -1,10 +1,25 @@
 /// Represents the entire dart_husky.yaml config file
 class GitHooksConfig {
+  /// Global dart_husky settings
+  final DartHuskyConfig globalConfig;
+
   /// Map of hook types to their configurations
   final Map<HookType, HookConfig> hooks;
 
   /// Creates a [GitHooksConfig] with the given hooks
-  const GitHooksConfig({required this.hooks});
+  const GitHooksConfig({
+    this.globalConfig = const DartHuskyConfig(),
+    required this.hooks,
+  });
+}
+
+/// Global dart_husky configuration — defined under the `dart_husky:` key
+class DartHuskyConfig {
+  /// Whether to print verbose output (default: true)
+  final bool verbose;
+
+  /// Creates a [DartHuskyConfig] with the given settings
+  const DartHuskyConfig({this.verbose = true});
 }
 
 /// All supported git hook types
@@ -74,6 +89,16 @@ class CommitMsgCommandConfig {
   /// The validation preset to use (e.g. 'conventional')
   final String preset;
 
+  /// Custom types to append to the built-in preset types
+  final List<String> appendTypes;
+
+  /// Custom types to override the built-in preset types entirely
+  final List<String> overrideTypes;
+
   /// Creates a [CommitMsgCommandConfig] with the given preset
-  const CommitMsgCommandConfig({required this.preset});
+  const CommitMsgCommandConfig({
+    required this.preset,
+    this.appendTypes = const [],
+    this.overrideTypes = const [],
+  });
 }

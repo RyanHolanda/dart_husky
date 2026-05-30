@@ -5,6 +5,7 @@ import 'config_model.dart';
 
 class ConfigParser {
   static const _configFileName = 'dart_husky.yaml';
+  static const _globalConfigKey = 'dart_husky';
 
   /// Finds and parses dart_husky.yaml from the project root
   static GitHooksConfig parse() {
@@ -30,19 +31,32 @@ class ConfigParser {
 
   static GitHooksConfig _parseConfig(YamlMap yaml) {
     final hooks = <HookType, HookConfig>{};
+    DartHuskyConfig globalConfig = const DartHuskyConfig();
 
     for (final entry in yaml.entries) {
-      final hookType = HookType.fromString(entry.key as String);
+      final key = entry.key as String;
+
+      // handle global dart_husky: block
+      if (key == _globalConfigKey) {
+        globalConfig = _parseGlobalConfig(entry.value as YamlMap);
+        continue;
+      }
+
+      final hookType = HookType.fromString(key);
 
       if (hookType == null) {
-        print('⚠️  Unknown hook "${entry.key}" — skipping.');
+        print('⚠️  Unknown hook "$key" — skipping.');
         continue;
       }
 
       hooks[hookType] = _parseHookConfig(entry.value as YamlMap, hookType);
     }
 
-    return GitHooksConfig(hooks: hooks);
+    return GitHooksConfig(globalConfig: globalConfig, hooks: hooks);
+  }
+
+  static DartHuskyConfig _parseGlobalConfig(YamlMap yaml) {
+    return DartHuskyConfig(verbose: yaml['verbose'] as bool? ?? true);
   }
 
   static HookConfig _parseHookConfig(YamlMap yaml, HookType hookType) {
@@ -69,16 +83,6 @@ class ConfigParser {
     );
   }
 
-  static CommitMsgCommandConfig _parseCommitMsgCommandConfig(YamlMap yaml) {
-    final preset = yaml['preset'] as String?;
-
-    if (preset == null) {
-      throw FormatException('commit-msg command must have a "preset" field.');
-    }
-
-    return CommitMsgCommandConfig(preset: preset);
-  }
-
   static CommandConfig _parseCommandConfig(YamlMap yaml) {
     final run = yaml['run'] as String?;
 
@@ -87,5 +91,35 @@ class ConfigParser {
     }
 
     return CommandConfig(run: run, glob: yaml['glob'] as String?);
+  }
+
+  static CommitMsgCommandConfig _parseCommitMsgCommandConfig(YamlMap yaml) {
+    final preset = yaml['preset'] as String?;
+
+    if (preset == null) {
+      throw FormatException('commit-msg command must have a "preset" field.');
+    }
+
+    final typesYaml = yaml['types'] as YamlMap?;
+    final appendTypes = _parseTypesList(typesYaml, 'append');
+    final overrideTypes = _parseTypesList(typesYaml, 'override');
+
+    if (appendTypes.isNotEmpty && overrideTypes.isNotEmpty) {
+      throw FormatException(
+        'commit-msg types cannot have both "append" and "override" at the same time.',
+      );
+    }
+
+    return CommitMsgCommandConfig(
+      preset: preset,
+      appendTypes: appendTypes,
+      overrideTypes: overrideTypes,
+    );
+  }
+
+  static List<String> _parseTypesList(YamlMap? typesYaml, String key) {
+    if (typesYaml == null) return const [];
+    final list = typesYaml[key] as YamlList?;
+    return list?.map((e) => e as String).toList() ?? const [];
   }
 }
