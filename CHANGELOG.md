@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-05-30
+
+### Added
+- **Glob Pattern Filtering**: Integrated `glob` package to filter command execution. Hooks can be configured with a `glob` pattern (e.g., `glob: '**/*.dart'`), skipping execution if no staged files match the glob sequence.
+- **Lowercase Commit Message Check**: Added the `only_small_case` configuration flag (enabled by default) to enforce fully lowercase formats for commit messages under the conventional preset.
+- **Lazy Staged File Querying**: Optimized performance in `HookRunner` by retrieving staged files only when a command with `glob` pattern or `staged_only: true` is configured.
+
 ## [1.1.0] - 2026-05-30
 
 ### Added
