@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2026-06-06
+
+### Fixed
+- **SDK Constraint**: Lowered the minimum SDK constraint from `>=3.12.0` to `>=3.0.0`, unblocking usage on current Dart stable releases ([#4](https://github.com/moulibheemaneti/dart_husky/issues/4)). Updated the README badge to match.
+
+### Chore
+- **Package Metadata**: Added `topics`, `homepage`, `issue_tracker`, and `screenshots` fields to `pubspec.yaml` for improved pub.dev discoverability.
+- **Contributing Guide**: Added `CONTRIBUTING.md` documenting setup commands, active git hooks, and commit conventions.
+- **Issue Templates**: Added YAML-based GitHub issue templates for bug reports and feature requests, plus a `config.yml` routing security reports to GitHub Security Advisories.
+- **Pull Request Template**: Added `.github/pull_request_template.md` with a standard checklist.
+- **Security Policy**: Added `SECURITY.md` describing the supported versions and private vulnerability reporting process.
+
 ## [1.2.1] - 2026-05-30
 
 ### CI

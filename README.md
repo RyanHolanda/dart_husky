@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/moulibheemaneti/dart_husky/main/.github/assets/logo.png" alt="dart_husky" width="80" />
+<img src="doc/assets/logo.png" alt="dart_husky" width="80" />
 
 # dart_husky
 
@@ -9,7 +9,7 @@
 [![pub version](https://img.shields.io/pub/v/dart_husky.svg?style=flat-square&color=0175C2&labelColor=1a1a2e)](https://pub.dev/packages/dart_husky)
 [![pub points](https://img.shields.io/pub/points/dart_husky?style=flat-square&color=0175C2&labelColor=1a1a2e)](https://pub.dev/packages/dart_husky/score)
 [![license](https://img.shields.io/badge/license-MIT-0175C2?style=flat-square&labelColor=1a1a2e)](LICENSE)
-[![dart](https://img.shields.io/badge/dart-%3E%3D3.12.0-0175C2?style=flat-square&labelColor=1a1a2e)](https://dart.dev)
+[![dart](https://img.shields.io/badge/dart-%3E%3D3.0.0-0175C2?style=flat-square&labelColor=1a1a2e)](https://dart.dev)
 
 Pure Dart. Zero external dependencies. Works with Flutter, FVM, or bare Dart SDK.  
 Inspired by [husky](https://github.com/typicode/husky) and [lefthook](https://github.com/evilmartians/lefthook).
