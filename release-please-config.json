@@ -3,7 +3,7 @@
 	"packages": {
 		".": {
 			"release-type": "dart",
-			"package-name": "adaptive_navbar",
+			"package-name": "dart_husky",
 			"include-component-in-tag": true,
 			"changelog-path": "CHANGELOG.md",
 			"changelog-sections": [
